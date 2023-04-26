@@ -45,11 +45,38 @@ export class AuthService {
     return tokens;
   }
 
-  logout() {
-
+  async logout(userId: number) {
+    await this.prisma.user.updateMany({
+      where: {
+        id: userId,
+        hashedRt: {
+          not: null,
+        },
+      },
+      data: {
+        hashedRt: null,
+      },
+    });
   }
-  refreshTokens() {
 
+  async refreshTokens(userId: number, rt: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user)
+      throw new ForbiddenException(
+        'the user you entered doesn’t seem to exist.',
+      );
+
+    const rtMatches: boolean = await bcrypt.compare(rt, user.hashedRt);
+    if (!rtMatches) throw new ForbiddenException('Incorrect token');
+
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    return tokens;
   }
 
   async updateRtHash(userId: number, rt: string) {
