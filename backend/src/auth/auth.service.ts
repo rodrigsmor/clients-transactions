@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as bcrypt from 'bcrypt';
@@ -8,6 +8,61 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+
+  async signup(dto: AuthDto): Promise<Tokens> {
+    const hash = await this.hashData(dto.password);
+    const newUser = await this.prisma.user.create({
+      data: {
+        email: dto.email,
+        hash,
+      },
+    });
+
+    const tokens = await this.getTokens(newUser.id, newUser.email);
+    await this.updateRtHash(newUser.id, tokens.refresh_token);
+    return tokens;
+  }
+
+  async signin(dto: AuthDto): Promise<Tokens> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+
+    if (!user)
+      throw new ForbiddenException(
+        'The data provided does not correspond to any user',
+      );
+
+    const passwordMatched = await bcrypt.compare(dto.password, user.hash);
+
+    if (!passwordMatched)
+      throw new ForbiddenException('The password entered is not correct');
+
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    return tokens;
+  }
+
+  logout() {
+
+  }
+  refreshTokens() {
+
+  }
+
+  async updateRtHash(userId: number, rt: string) {
+    const hash = await this.hashData(rt);
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        hashedRt: hash,
+      },
+    });
+  }
 
   hashData(data: string) {
     return bcrypt.hash(data, 10);
@@ -41,43 +96,5 @@ export class AuthService {
       access_token: at,
       refresh_token: rt,
     };
-  }
-
-  async signup(dto: AuthDto): Promise<Tokens> {
-    const hash = await this.hashData(dto.password);
-    const newUser = await this.prisma.user.create({
-      data: {
-        email: dto.email,
-        hash,
-      },
-    });
-
-    const tokens = await this.getTokens(newUser.id, newUser.email);
-    await this.updateRtHash(newUser.id, tokens.refresh_token);
-    return tokens;
-  }
-
-  async updateRtHash(userId: number, rt: string) {
-    const hash = await this.hashData(rt);
-    await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        hashedRt: hash,
-      },
-    });
-  }
-
-  signin() {
-
-  }
-
-  logout() {
-
-  }
-
-  refreshTokens() {
-
   }
 }
