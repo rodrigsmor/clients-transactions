@@ -3,9 +3,11 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './common/guards';
-import { CustomerController } from './customer/customer.controller';
-import { CustomerService } from './customer/customer.service';
+import { CustomerController } from './api/customer/customer.controller';
+import { CustomerService } from './api/customer/customer.service';
 import { PrismaClient } from '@prisma/client';
+import { ProductController } from './api/product/product.controller';
+import { ProductService } from './api/product/product.service';
 
 @Module({
   imports: [AuthModule, PrismaModule, PrismaClient],
@@ -15,7 +17,8 @@ import { PrismaClient } from '@prisma/client';
       useClass: AccessTokenGuard,
     },
     CustomerService,
+    ProductService,
   ],
-  controllers: [CustomerController],
+  controllers: [CustomerController, ProductController],
 })
 export class AppModule {}
