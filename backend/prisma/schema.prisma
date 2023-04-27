@@ -11,12 +11,57 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  email       String    @unique
-  hash        String
-  hashedRt    String?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  hash      String
+  hashedRt  String?
 
   @@map("users")
+}
+
+model Product {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique
+  owner            Customer           @relation("ProductOwner", fields: [ownerId], references: [id])
+  ownerId          Int
+  affiliates       Customer[]         @relation("ProductAffiliate")
+  ProductAffiliate ProductAffiliate[]
+}
+
+model Customer {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique
+  email            String             @unique
+  balance_amount   Decimal
+  profile_picture  String?
+  transactions     Transaction[]
+  products         Product[]          @relation("ProductAffiliate")
+  owned            Product[]          @relation("ProductOwner")
+  ProductAffiliate ProductAffiliate[]
+
+  @@map("costumers")
+}
+
+model ProductAffiliate {
+  customerId Int
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  costumer   Customer @relation(fields: [customerId], references: [id])
+
+  @@id([customerId, productId])
+  @@map("ProductAffiliate")
+}
+
+model Transaction {
+  id         Int      @id @default(autoincrement())
+  type       String
+  product    String
+  date       DateTime
+  value      Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  @@map("transactions")
 }
