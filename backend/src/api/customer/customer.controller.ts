@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { CreateCustomerDto } from './dto';
 import { CustomerService } from './customer.service';
 import { ResponseDto } from 'src/utils/dto/responseDto';
@@ -8,6 +8,7 @@ export class CustomerController {
   constructor(private customerService: CustomerService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async createCustomer(
     @Body() customer: CreateCustomerDto,
   ): Promise<ResponseDto> {
