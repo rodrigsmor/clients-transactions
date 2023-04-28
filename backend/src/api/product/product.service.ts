@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { ResponseDto } from 'src/utils/dto/responseDto';
 
@@ -42,6 +47,54 @@ export class ProductService {
     return {
       data: product,
       message: 'Produto criado com êxito!',
+    };
+  }
+
+  async addAffiliateToProduct(
+    productId: number,
+    customerId: number,
+  ): Promise<ResponseDto> {
+    if (!productId || productId === null || customerId === null || !customerId)
+      throw new BadRequestException(
+        'Você deve informar o id do produto e do cliente!',
+      );
+
+    const customer = await this.prisma.customer.findUnique({
+      where: { id: customerId },
+    });
+
+    if (!customer)
+      throw new BadRequestException('O usuário informado não existe!');
+
+    const product = await this.prisma.product.findUnique({
+      where: { id: productId },
+      select: {
+        id: true,
+        name: true,
+        affiliates: true,
+        ProductAffiliate: { select: { customerId: true } },
+      },
+    });
+
+    if (!product)
+      throw new BadRequestException('O produto informado não existe!');
+
+    const productUpdated = await this.prisma.product.update({
+      where: { id: productId },
+      data: { affiliates: { connect: { id: customer.id } } },
+    });
+
+    if (!productUpdated)
+      throw new InternalServerErrorException(
+        'Algo deu errado ao tentar adicionar afiliado. Tente novamente mais tarde!',
+      );
+
+    return {
+      message: `Adiciona o ${customer.name} como afiliado do produto "${product.name}"`,
+      data: {
+        product: productUpdated,
+        customer,
+      },
     };
   }
 
