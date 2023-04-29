@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -44,6 +45,10 @@ module.exports = {
     },
     fontWeight: {
       regular: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
+      extrabold: '800'
     }
   },
   plugins: [],
