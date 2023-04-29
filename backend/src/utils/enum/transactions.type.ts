@@ -1,0 +1,6 @@
+export enum TransactionsTypes {
+  'PRODUCER_SALES',
+  'AFFILIATE_SALES',
+  'COMMISSION_PAID',
+  'COMMISSION_RECEIVED',
+}

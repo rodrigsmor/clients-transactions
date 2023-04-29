@@ -8,6 +8,8 @@ import { CustomerService } from './api/customer/customer.service';
 import { PrismaClient } from '@prisma/client';
 import { ProductController } from './api/product/product.controller';
 import { ProductService } from './api/product/product.service';
+import { TransactionsController } from './api/transactions/transactions.controller';
+import { TransactionsService } from './api/transactions/transactions.service';
 
 @Module({
   imports: [AuthModule, PrismaModule, PrismaClient],
@@ -18,7 +20,8 @@ import { ProductService } from './api/product/product.service';
     },
     CustomerService,
     ProductService,
+    TransactionsService,
   ],
-  controllers: [CustomerController, ProductController],
+  controllers: [CustomerController, ProductController, TransactionsController],
 })
 export class AppModule {}

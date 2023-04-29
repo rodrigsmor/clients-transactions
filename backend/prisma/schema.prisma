@@ -27,7 +27,7 @@ model Product {
   owner            Customer           @relation("ProductOwner", fields: [ownerId], references: [id])
   ownerId          Int
   affiliates       Customer[]         @relation("ProductAffiliate")
-  ProductAffiliate ProductAffiliate[]
+  transactions     Transaction[]
 }
 
 model Customer {
@@ -39,25 +39,15 @@ model Customer {
   transactions     Transaction[]
   products         Product[]          @relation("ProductAffiliate")
   owned            Product[]          @relation("ProductOwner")
-  ProductAffiliate ProductAffiliate[]
 
-  @@map("costumers")
-}
-
-model ProductAffiliate {
-  customerId Int
-  productId  Int
-  product    Product  @relation(fields: [productId], references: [id])
-  costumer   Customer @relation(fields: [customerId], references: [id])
-
-  @@id([customerId, productId])
-  @@map("ProductAffiliate")
+  @@map("custumers")
 }
 
 model Transaction {
   id         Int      @id @default(autoincrement())
   type       String
-  product    String
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int
   date       DateTime
   value      Int
   customer   Customer @relation(fields: [customerId], references: [id])

@@ -72,7 +72,6 @@ export class ProductService {
         id: true,
         name: true,
         affiliates: true,
-        ProductAffiliate: { select: { customerId: true } },
       },
     });
 
