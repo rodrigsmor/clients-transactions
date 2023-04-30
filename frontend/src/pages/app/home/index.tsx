@@ -4,9 +4,9 @@ import { FormLink } from "@components/textual/formLink";
 import { Redirect } from "@components/textual/redirect";
 import Head from "next/head";
 import { HiUserAdd } from "react-icons/hi";
-import { MdUploadFile } from "react-icons/md";
-import { recentTransactions } from "src/utils/mock/transactions";
 import { BsFileTextFill } from 'react-icons/bs'
+import { RiUploadCloud2Fill } from "react-icons/ri";
+import { recentTransactions } from "src/utils/mock/transactions";
 import { customerSummary } from "src/utils/mock/customerSummary";
 import { CustomerSummaryCard } from "@components/cards/customerSummaryCard";
 
@@ -26,7 +26,7 @@ const Home = () => {
                 <p className="text-lg text-typography-main/60 font-medium">O que deseja fazer agora?</p>
               </div>
               <div className="w-full flex flex-col lg:flex-row  [&>a]:flex-grow gap-4">
-                <FormLink name='transaction' Icon={<MdUploadFile />} caption="Novidades? Adicione-as agora." label="Adicionar transações" path="/app/transactions/new" />
+                <FormLink name='transaction' Icon={<RiUploadCloud2Fill />} caption="Novidades? Adicione-as agora." label="Adicionar transações" path="/app/transactions/new" />
                 <FormLink name='customer' Icon={<HiUserAdd />} caption="Adicione novos clientes ao seu negócio." label="Criar novo cliente" path="/app/transactions/new" />
                 <FormLink name='see-transactions' Icon={<BsFileTextFill />} caption="Confira as atividades de seus clientes." label="Ver transações" path="/app/transactions" />
               </div>
