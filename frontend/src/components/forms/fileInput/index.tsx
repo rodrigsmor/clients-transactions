@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useState } from "react";
 import { FiUploadCloud } from "react-icons/fi";
 import TransactionType from "src/utils/@types/transaction";
@@ -31,7 +30,7 @@ export const FileInput = ({ onChange, setTransactions }: FileInputType) => {
             date: new Date(row.slice(1, 26)),
             product: row.slice(26, 56),
             value: parseInt(row.slice(56, 66)),
-            seller: row.slice(66, row.length - 1),
+            seller: row.slice(66, row.length),
           } as TransactionType)
         })
 
@@ -46,7 +45,7 @@ export const FileInput = ({ onChange, setTransactions }: FileInputType) => {
     <fieldset className="w-full p-6 grid place-items-center bg-primary-main/5 rounded-xl border-2 border-primary-main/20 relative focus-within:border-primary-main/60 transition-all ease-out duration-300">
       <label htmlFor="fileInput" className="w-full flex flex-col items-center text-center gap-3 text-sm md:text-lg font-medium text-primary-main">
         <FiUploadCloud size={34} className="text-primary-main" />
-        Enviar arquivo de transações
+        Enviar arquivo das transações
       </label>
       <input id="fileInput" type="file" onChange={handleFileChange} className=" w-full h-full absolute opacity-0" />
       <figure className='w-full h-11 border-2 max-h-11 max-w-full overflow-hidden grid place-items-center border-primary-main/20 mt-6 rounded-xl bg-primary-light'>
