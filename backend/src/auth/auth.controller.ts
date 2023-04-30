@@ -7,7 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
+import { AuthDto, SignupDto } from './dto';
 import { Tokens } from './types';
 import { RefreshTokenGuard } from 'src/common/guards';
 import {
@@ -23,7 +23,7 @@ export class AuthController {
   @Public()
   @Post('/signup')
   @HttpCode(HttpStatus.CREATED)
-  signup(@Body() dto: AuthDto): Promise<Tokens> {
+  signup(@Body() dto: SignupDto): Promise<Tokens> {
     return this.authService.signup(dto);
   }
 
