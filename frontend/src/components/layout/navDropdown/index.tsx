@@ -16,7 +16,7 @@ const NavDropdown = () => {
   const pages = [
     {
       id: 0,
-      label: 'Início',
+      label: 'Visão geral',
       Icon: <HiHome />,
       link: '/app/home',
     }, {
