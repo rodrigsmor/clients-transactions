@@ -1,7 +1,10 @@
+import dotenv from 'dotenv';
 import { GoogleFonts } from 'next-google-fonts';
 import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
+  dotenv.config();
+
   return (
     <Html lang="en">
       <Head>
