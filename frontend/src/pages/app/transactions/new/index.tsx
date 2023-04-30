@@ -46,6 +46,11 @@ const TransactionNew = () => {
                   </ol>
                 </div>
               </section>
+              <footer className='w-full flex justify-end'>
+                <button type='submit' className="w-full bg-primary-main text-background-main lg:w-1/3 font-semibold flex items-center justify-center text-center h-11 rounded-xl transition-all  hover:bg-primary-dark mt-3">
+                  Salvar transações
+                </button>
+              </footer>
             </form>
           </section>
         </main>
