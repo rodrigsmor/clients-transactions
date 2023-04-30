@@ -25,3 +25,15 @@
   background: #0E142840;
   border: 3px solid #fff9f7;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.custom-scrollbar.horizontal::-webkit-scrollbar {
+  height: 8px;
+}
