@@ -42,7 +42,7 @@ const NavDropdown = () => {
         </div>
         <FiMoreVertical size={20} className="text-typography-main/80" />
       </div>
-      <nav className={`absolute w-80 right-0 bg-background-main top-16 gap-4 shadow-light rounded-2xl p-4 flex flex-col justify-center items-center md:translate-x-6 duration-300 ease-out transition-all ${isDropdownActive ? 'opacity-100' : 'opacity-0'}`}>
+      <nav className={`absolute w-80 right-0 bg-background-main top-16 gap-4 shadow-light rounded-2xl p-4 flex flex-col justify-center items-center md:translate-x-6 duration-300 ease-out transition-all ${isDropdownActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <header className="w-full max-w-full overflow-hidden">
           <h3 className="font-medium text-base max-w-full truncate">Olá, <span className="font-semibold text-primary-main">Rodrigo</span>!</h3>
         </header>
