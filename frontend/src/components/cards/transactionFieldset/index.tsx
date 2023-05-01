@@ -28,10 +28,10 @@ export const TransactionFieldset = ({ data: { date, product, seller, type, value
       <div className={`w-full transition-all flex gap-4 ease-out duration-300 ${isExpanded && 'expanded'} h-0 [&.expanded]:h-[408px] overflow-hidden pt-3 pl-3 lg:pl-5`}>
         <span className='w-[1px] h-full bg-typography-light/10'></span>
         <div className='w-full flex flex-col gap-3 pt-5'>
-          <InputForm isReadOnly label='Nome do vendedor' name='seller-transaction' placeholder='Vendedor' type='text' value={seller} isSecondary />
-          <InputForm isReadOnly label='Produto' name='product-transaction' placeholder='produto' type='text' value={product} isSecondary />
-          <InputForm isReadOnly label='Valor da transação' name='value-transaction' placeholder='valor' type='string' value={valueConverted.formattedValue} isSecondary />
-          <InputForm isReadOnly label='Data do produto' name='datetime-transaction' placeholder='Data da transação' type='text' value={formatDateTime(date)} isSecondary />
+          <InputForm isReadOnly label='Nome do vendedor' name='seller-transaction' placeholder='Vendedor' type='text' props={{ value: seller, }} isSecondary />
+          <InputForm isReadOnly label='Produto' name='product-transaction' placeholder='produto' type='text' props={{ value: product, }} isSecondary />
+          <InputForm isReadOnly label='Valor da transação' name='value-transaction' placeholder='valor' type='string' props={{value: valueConverted.formattedValue}} isSecondary />
+          <InputForm isReadOnly label='Data do produto' name='datetime-transaction' placeholder='Data da transação' type='text' props={{ value: formatDateTime(date) }} isSecondary />
         </div>
       </div>
     </article>
