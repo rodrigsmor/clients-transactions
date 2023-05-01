@@ -22,8 +22,9 @@ const Login = () => {
     const data = event as SigninType;
     setIsLoading(true)
 
-    await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, data)
+    await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signin`, data)
       .then(({ data }) => {
+        console.log(data.access_token)
         if(data.access_token && data.refresh_token) {
           localStorage.setItem('token', data.access_token)
           localStorage.setItem('refreshToken', data.refresh_token)
