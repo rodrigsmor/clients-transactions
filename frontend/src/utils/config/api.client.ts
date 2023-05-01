@@ -12,7 +12,7 @@ apiClient.interceptors.request.use(async (config) => {
     try {
       const decodedToken: any = jose.decodeJwt(token)
 
-      if(decodedToken.exp * 100 < Date.now()) {
+      if (Date.now() >= decodedToken.exp * 1000) {
         const refreshToken = localStorage.getItem('refreshToken');
 
         if(refreshToken) {
@@ -32,13 +32,12 @@ apiClient.interceptors.request.use(async (config) => {
             localStorage.removeItem('refreshToken');
             window.location.replace('/login')
           }
-        } else {
-          config.headers.Authorization = `Bearer ${token}`;
         }
+      } else {
+        config.headers.Authorization = `Bearer ${token}`;
       }
     } catch (error) {
-      console.log(error)
-
+      alert('erro um')
       localStorage.removeItem('token')
       localStorage.removeItem('refreshToken')
       window.location.replace('/login')

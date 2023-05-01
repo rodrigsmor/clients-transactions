@@ -10,10 +10,17 @@ import { recentTransactions } from "src/utils/mock/transactions";
 import { customerSummary } from "src/utils/mock/customerSummary";
 import { CustomerSummaryCard } from "@components/cards/customerSummaryCard";
 import { useEffect } from "react";
+import apiClient from "src/utils/config/api.client";
+import { toast } from "react-hot-toast";
 
 const Home = () => {
   useEffect(() => {
-    localStorage.getItem('accessToken');
+    apiClient.get('/auth')
+      .then(({ data }) => {
+        console.log(data)
+      }).catch(({ response: { data } }) => {
+        toast.error(data.error.message);
+      })
   }, [])
 
   return (

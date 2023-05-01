@@ -27,6 +27,7 @@ const Login = () => {
         if(data.access_token && data.refresh_token) {
           localStorage.setItem('token', data.access_token)
           localStorage.setItem('refreshToken', data.refresh_token)
+          console.log(data.access_token)
 
           router.push('/app/home');
         }

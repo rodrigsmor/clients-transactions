@@ -135,7 +135,7 @@ export class AuthService {
         },
         {
           secret: 'at-scret',
-          expiresIn: 60 * 15,
+          expiresIn: 60 * 80,
         },
       ),
       this.jwtService.signAsync(
