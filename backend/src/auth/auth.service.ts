@@ -16,11 +16,12 @@ export class AuthService {
   async signup(dto: SignupDto): Promise<Tokens> {
     const hash = await this.hashData(dto.password);
 
-    const user = await this.prisma.user.findUnique({
+    const isTheEmailAlreadyInUse = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
 
-    if (user) throw new BadRequestException('O e-mail já está em uso.');
+    if (isTheEmailAlreadyInUse)
+      throw new BadRequestException('O e-mail já está em uso.');
 
     const newUser = await this.prisma.user.create({
       data: {
@@ -42,15 +43,22 @@ export class AuthService {
       },
     });
 
+    if (!dto.email || !dto.password)
+      throw new BadRequestException(`
+        Há dados obrigatóritos faltando: 
+          ${!dto.email && 'E-mail está ausente.'}
+          ${!dto.password && 'Senha está ausente.'}
+      `);
+
     if (!user)
       throw new ForbiddenException(
-        'The data provided does not correspond to any user',
+        'Os dados providenciados não correspondem a nenhum usuário.',
       );
 
     const passwordMatched = await bcrypt.compare(dto.password, user.hash);
 
     if (!passwordMatched)
-      throw new ForbiddenException('The password entered is not correct');
+      throw new ForbiddenException('A senha providenciada não está correta');
 
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refresh_token);

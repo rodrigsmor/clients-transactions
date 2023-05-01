@@ -3,6 +3,11 @@ import SigninType from 'src/utils/@types/login';
 import SignupType from 'src/utils/@types/signup';
 import { InputForm } from "@components/forms/inputForm";
 import { AuthTemplate } from "@components/layout/authTemplate";
+import { useState } from 'react';
+import apiClient from 'src/utils/config/api.client';
+import { useRouter } from 'next/router';
+import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 const validationSchema = Yup.object({
   email: Yup.string().email('E-mail inválido.').required('O e-mail é obrigatório!'),
@@ -10,8 +15,24 @@ const validationSchema = Yup.object({
 })
 
 const Login = () => {
-  const handleSubmit = (event: SignupType | SigninType) => {
+  const router = useRouter();
+  const [ isLoading, setIsLoading ] = useState<boolean>(false);
+
+  const handleSubmit = async (event: SignupType | SigninType) => {
     const data = event as SigninType;
+    setIsLoading(true)
+
+    await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, data)
+      .then(({ data }) => {
+        if(data.access_token && data.refresh_token) {
+          localStorage.setItem('token', data.access_token)
+          localStorage.setItem('refreshToken', data.refresh_token)
+
+          router.push('/app/home');
+        }
+      }).catch(({ response: { data } }) => {
+        toast.error(data.error.message);
+      }).finally(() => setIsLoading(false))
   }
 
   const initialValues = {
@@ -20,7 +41,7 @@ const Login = () => {
   }
 
   return (
-    <AuthTemplate initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} title="Conectar" ctaButtonLabel="conectar" subtitle="Conecte-se ao seu administrador e tenha acesso as transações de seus clientes.">
+    <AuthTemplate isLoading={isLoading} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} title="Conectar" ctaButtonLabel="conectar" subtitle="Conecte-se ao seu administrador e tenha acesso as transações de seus clientes.">
       <>
         <InputForm label="E-mail" name="email" placeholder="Type your e-mail" type="email" className="col-start-1 col-end-3" />
         <InputForm label="password" name="password" placeholder="Type your password" type="password" className="col-start-1 col-end-3" />

@@ -25,6 +25,7 @@ export class GlobalExecptionFilter implements ExceptionFilter {
     const response = context.getResponse<Response>();
     const request = context.getRequest<IncomingMessage>();
     const code = getStatusCode(exception);
+    const except = getErrorMessage(exception).split(': ')[0];
     const message = getErrorMessage(exception).split(': ')[1];
 
     response.status(code).json({
@@ -33,6 +34,7 @@ export class GlobalExecptionFilter implements ExceptionFilter {
         path: request.url,
         code,
         message,
+        exception: except,
       },
     });
   }

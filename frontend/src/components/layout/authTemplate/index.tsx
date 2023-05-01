@@ -14,10 +14,11 @@ interface AuthTemplateProps {
   children: ReactNode;
   ctaButtonLabel: string;
   validationSchema: any;
+  isLoading: boolean;
   onSubmit: (event: SignupType | SigninType) => void;
 }
 
-export const AuthTemplate = ({ children, onSubmit, validationSchema, ctaButtonLabel, subtitle, title, initialValues }: AuthTemplateProps) => {
+export const AuthTemplate = ({ children, onSubmit, validationSchema, ctaButtonLabel, subtitle, title, initialValues, isLoading }: AuthTemplateProps) => {
   const router = useRouter();
 
   return (
@@ -42,7 +43,7 @@ export const AuthTemplate = ({ children, onSubmit, validationSchema, ctaButtonLa
             { children }
             </fieldset>
             <footer className="w-full flex-col min-w-full gap-4 flex items-center justify-center h-fit">
-              <CtaButton type="submit" label={ctaButtonLabel} className="!w-full lg:!w-3/5" />
+              <CtaButton type="submit" isLoading={isLoading} label={ctaButtonLabel} className="!w-full lg:!w-3/5" />
               {
                 router.pathname.includes('login')
                   ? (
