@@ -9,19 +9,13 @@ import { RiUploadCloud2Fill } from "react-icons/ri";
 import { recentTransactions } from "src/utils/mock/transactions";
 import { customerSummary } from "src/utils/mock/customerSummary";
 import { CustomerSummaryCard } from "@components/cards/customerSummaryCard";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import apiClient from "src/utils/config/api.client";
 import { toast } from "react-hot-toast";
+import AppContext from "src/utils/context/appContext";
 
 const Home = () => {
-  useEffect(() => {
-    apiClient.get('/auth')
-      .then(({ data }) => {
-        console.log(data)
-      }).catch(({ response: { data } }) => {
-        toast.error(data.error.message);
-      })
-  }, [])
+  const { user } = useContext(AppContext);
 
   return (
     <>
@@ -34,7 +28,7 @@ const Home = () => {
           <div className="lg:col-start-1 lg:col-end-2 flex flex-col gap-7 overflow-hidden">
             <header className="w-full max-w-full flex flex-col gap-7 overflow-hidden">
               <div className="w-full max-w-full overflow-hidden">
-                <h2 className='text-2xl font-semibold max-w-full'>Bem-vindo de volta, <span className="font-extrabold text-primary-main">Rodrigo</span>!</h2>
+                <h2 className='text-2xl font-semibold max-w-full'>Bem-vindo de volta, <span className="font-extrabold text-primary-main">{user?.name.split(' ')[0]}</span>!</h2>
                 <p className="text-lg text-typography-main/60 font-medium">O que deseja fazer agora?</p>
               </div>
               <div className="w-full flex flex-col lg:flex-row  [&>a]:flex-grow gap-4">
