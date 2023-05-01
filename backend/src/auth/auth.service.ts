@@ -84,8 +84,11 @@ export class AuthService {
         'the user you entered doesn’t seem to exist.',
       );
 
-    const rtMatches: boolean = await bcrypt.compare(rt, user.hashedRt);
-    if (!rtMatches) throw new ForbiddenException('Incorrect token');
+    try {
+      await bcrypt.compare(rt, user.hashedRt);
+    } catch (error) {
+      throw new ForbiddenException('Token incorreto');
+    }
 
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refresh_token);

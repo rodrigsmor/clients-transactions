@@ -34,11 +34,14 @@ describe('AuthService', () => {
 
   const hash = bcrypt.hashSync('senha123', 10);
 
-  const mockUser = {
+  const mockUser: User = {
     id: 1,
     email: 'user@test.com',
     name: 'User test',
     hash,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    hashedRt: '',
   };
 
   describe('signup', () => {
@@ -134,6 +137,99 @@ describe('AuthService', () => {
       });
       expect(tokens.access_token).toBeDefined();
       expect(tokens.refresh_token).toBeDefined();
+    });
+  });
+
+  describe('logout', () => {
+    it('should remove the refresh Token from user with given userId', async () => {
+      const userId = 1;
+
+      mockPrismaService.user.updateMany.mockResolvedValueOnce({ count: 2 });
+
+      await authService.logout(userId);
+
+      expect(mockPrismaService.user.updateMany).toHaveBeenCalledWith({
+        where: {
+          id: userId,
+          hashedRt: {
+            not: null,
+          },
+        },
+        data: {
+          hashedRt: null,
+        },
+      });
+    });
+  });
+
+  describe('refreshTokens', () => {
+    const userId = 1;
+    const rt = 'old-refresht-token';
+
+    it('should throw an error if user is not found', async () => {
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValueOnce(null);
+
+      await expect(authService.refreshTokens(userId, rt)).rejects.toThrowError(
+        ForbiddenException,
+      );
+    });
+
+    it('should throw an error if user has no refresh Token (hashedRt)', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValueOnce({ ...mockUser, id: userId, hashedRt: null });
+
+      await expect(authService.refreshTokens(userId, rt)).rejects.toThrowError(
+        ForbiddenException,
+      );
+    });
+
+    it('should throw an error if the refresh token does not match the user hashedRt', async () => {
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValueOnce({
+        id: userId,
+        hashedRt: 'some-hashed-token',
+        ...mockUser,
+      });
+
+      jest.spyOn(bcrypt, 'compare').mockReturnValueOnce();
+
+      await expect(authService.refreshTokens(userId, rt)).rejects.toThrowError(
+        ForbiddenException,
+      );
+    });
+
+    it('should generate new tokens and update the user hashedRt', async () => {
+      const userId = 1;
+      const rt = 'some-refresh-token';
+      const email = 'test@test.com';
+      const hashedRt = 'some-hashed-token';
+
+      jest.mock('bcrypt', () => ({
+        compare: jest.fn().mockResolvedValue(true),
+      }));
+
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValueOnce({
+        ...mockUser,
+        id: userId,
+        email,
+        hashedRt,
+      });
+
+      jest.spyOn(authService, 'getTokens').mockResolvedValueOnce({
+        access_token: 'new-access-token',
+        refresh_token: 'new-refresh-token',
+      });
+      jest.spyOn(authService, 'updateRtHash').mockResolvedValueOnce(null);
+
+      const tokens = await authService.refreshTokens(userId, rt);
+
+      expect(authService.getTokens).toHaveBeenCalledWith(userId, email);
+      expect(authService.updateRtHash).toHaveBeenCalledWith(
+        userId,
+        'new-refresh-token',
+      );
+      expect(tokens.access_token).toBe('new-access-token');
+      expect(tokens.refresh_token).toBe('new-refresh-token');
     });
   });
 });
