@@ -4,7 +4,6 @@ import SignupType from 'src/utils/@types/signup';
 import { InputForm } from "@components/forms/inputForm";
 import { AuthTemplate } from "@components/layout/authTemplate";
 import { useState } from 'react';
-import apiClient from 'src/utils/config/api.client';
 import { useRouter } from 'next/router';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';

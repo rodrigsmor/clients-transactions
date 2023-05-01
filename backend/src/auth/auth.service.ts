@@ -8,6 +8,9 @@ import { AuthDto, SignupDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/utils/@types';
+import { ResponseDto } from 'src/utils/dto/responseDto';
+import { CurrentUserDto } from './dto/current.user.dto';
 
 @Injectable()
 export class AuthService {
@@ -93,6 +96,18 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refresh_token);
     return tokens;
+  }
+
+  async getCurrentUser(jwt: JwtPayload): Promise<CurrentUserDto> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { id: jwt.sub },
+      });
+
+      return new CurrentUserDto(user);
+    } catch (error) {
+      throw new BadRequestException('O usuário parece não existir!');
+    }
   }
 
   async updateRtHash(userId: number, rt: string) {

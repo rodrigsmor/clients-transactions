@@ -9,8 +9,13 @@ import { RiUploadCloud2Fill } from "react-icons/ri";
 import { recentTransactions } from "src/utils/mock/transactions";
 import { customerSummary } from "src/utils/mock/customerSummary";
 import { CustomerSummaryCard } from "@components/cards/customerSummaryCard";
+import { useEffect } from "react";
 
 const Home = () => {
+  useEffect(() => {
+    localStorage.getItem('accessToken');
+  }, [])
+
   return (
     <>
       <Head>
