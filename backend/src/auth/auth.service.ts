@@ -3,7 +3,7 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto, SignupDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { Tokens } from './types';
@@ -42,13 +42,6 @@ export class AuthService {
         email: dto.email,
       },
     });
-
-    if (!dto.email || !dto.password)
-      throw new BadRequestException(`
-        Há dados obrigatóritos faltando: 
-          ${!dto.email && 'E-mail está ausente.'}
-          ${!dto.password && 'Senha está ausente.'}
-      `);
 
     if (!user)
       throw new ForbiddenException(
