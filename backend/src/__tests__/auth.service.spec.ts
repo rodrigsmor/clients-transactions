@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -31,15 +32,70 @@ describe('AuthService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
+  const hash = bcrypt.hashSync('senha123', 10);
+
+  const mockUser = {
+    id: 1,
+    email: 'user@test.com',
+    name: 'User test',
+    hash,
+  };
+
+  describe('signup', () => {
+    beforeEach(() => {
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+    });
+
+    it('should throw a BadRequest if email already in use', async () => {
+      await expect(
+        authService.signup({
+          email: 'user@test.com',
+          name: 'User test',
+          password: 'test123',
+        }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should return the access and update tokens if the user has been successfully created', async () => {
+      const dto = {
+        email: 'test@example.com',
+        name: 'Test User',
+        password: 'password123',
+      };
+
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValueOnce(null);
+
+      const newUser: User = {
+        id: 1,
+        email: dto.email,
+        name: dto.name,
+        hash: bcrypt.hashSync(dto.password, 10).toString(),
+        updatedAt: new Date(),
+        createdAt: new Date(),
+        hashedRt: '',
+      };
+
+      jest.spyOn(prismaService.user, 'create').mockResolvedValueOnce(newUser);
+
+      const tokens = await authService.signup(dto);
+
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: dto.email },
+      });
+      expect(prismaService.user.create).toHaveBeenCalledWith({
+        data: {
+          email: dto.email,
+          name: dto.name,
+          hash: expect.any(String),
+        },
+      });
+
+      expect(tokens.access_token).toBeDefined();
+      expect(tokens.refresh_token).toBeDefined();
+    });
+  });
+
   describe('signin', () => {
-    const hash = bcrypt.hashSync('senha123', 10);
-
-    const mockUser = {
-      id: 1,
-      email: 'user@test.com',
-      hash,
-    };
-
     beforeEach(() => {
       mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
     });
