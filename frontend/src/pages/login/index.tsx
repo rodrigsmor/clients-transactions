@@ -1,7 +1,8 @@
 import * as Yup from 'yup';
+import SigninType from 'src/utils/@types/login';
+import SignupType from 'src/utils/@types/signup';
 import { InputForm } from "@components/forms/inputForm";
 import { AuthTemplate } from "@components/layout/authTemplate";
-import { FormEvent } from "react";
 
 const validationSchema = Yup.object({
   email: Yup.string().email('E-mail inválido.').required('O e-mail é obrigatório!'),
@@ -9,9 +10,8 @@ const validationSchema = Yup.object({
 })
 
 const Login = () => {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    alert('logou')
+  const handleSubmit = (event: SignupType | SigninType) => {
+    const data = event as SigninType;
   }
 
   const initialValues = {

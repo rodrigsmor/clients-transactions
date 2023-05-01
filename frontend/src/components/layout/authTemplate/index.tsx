@@ -4,6 +4,8 @@ import { FormEvent, ReactNode } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { Form, Formik } from "formik";
+import SignupType from "src/utils/@types/signup";
+import SigninType from "src/utils/@types/login";
 
 interface AuthTemplateProps {
   title: string;
@@ -12,7 +14,7 @@ interface AuthTemplateProps {
   children: ReactNode;
   ctaButtonLabel: string;
   validationSchema: any;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onSubmit: (event: SignupType | SigninType) => void;
 }
 
 export const AuthTemplate = ({ children, onSubmit, validationSchema, ctaButtonLabel, subtitle, title, initialValues }: AuthTemplateProps) => {
@@ -24,7 +26,7 @@ export const AuthTemplate = ({ children, onSubmit, validationSchema, ctaButtonLa
         <title>App - { router.pathname.includes('login') ? 'Login' : 'Sign up' }</title>
       </Head>
       <main className="w-screen h-screen bg-background-main px-4 grid place-items-center">
-        <Formik
+        <Formik<SignupType | SigninType>
           onSubmit={onSubmit}
           initialValues={initialValues}
           validationSchema={validationSchema}

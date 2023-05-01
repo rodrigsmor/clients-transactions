@@ -2,7 +2,7 @@ import axios from "axios";
 import * as jose from 'jose';
 
 const apiClient = axios.create({
-  baseURL: process.env.API_BASE_URL,
+  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}`,
 })
 
 apiClient.interceptors.request.use(async (config) => {

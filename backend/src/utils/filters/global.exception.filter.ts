@@ -25,7 +25,7 @@ export class GlobalExecptionFilter implements ExceptionFilter {
     const response = context.getResponse<Response>();
     const request = context.getRequest<IncomingMessage>();
     const code = getStatusCode(exception);
-    const message = getErrorMessage(exception);
+    const message = getErrorMessage(exception).split(': ')[1];
 
     response.status(code).json({
       error: {

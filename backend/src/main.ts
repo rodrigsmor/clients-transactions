@@ -6,6 +6,7 @@ import { GlobalExecptionFilter } from './utils/filters/global.exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
   app.useGlobalFilters(new GlobalExecptionFilter());
   await app.listen(3000);
 }
