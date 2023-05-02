@@ -11,8 +11,8 @@ import { HiUserCircle } from "react-icons/hi";
 const CustomerForm = () => {
   const [ name, setName ] = useState<string>('');
   const [ email, setEmail ] = useState<string>('');
-  const [ profilePicture, setProfilePicture ] = useState<string | null>(null);
   const [ products, setProducts ] = useState<Array<string>>(['']);
+  const [ profilePicture, setProfilePicture ] = useState<string | null>(null);
 
   const handleAddProduct = (event: MouseEvent<HTMLButtonElement>) => {
     const nonEmptyValues = products.filter(value => value !== '');

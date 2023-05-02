@@ -22,7 +22,7 @@ export class CustomerService {
       data: {
         email: customer.email,
         name: customer.name,
-        profile_picture: '',
+        profile_picture: customer.profilePicture,
         balance_amount: 0,
       },
     });

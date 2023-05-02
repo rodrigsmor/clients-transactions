@@ -36,7 +36,7 @@ model Customer {
   name             String             @unique
   email            String             @unique
   balance_amount   Decimal
-  profile_picture  String?
+  profile_picture  String?            @db.LongText
   transactions     Transaction[]
   products         Product[]          @relation("ProductAffiliate")
   owned            Product[]          @relation("ProductOwner")
