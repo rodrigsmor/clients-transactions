@@ -1,4 +1,5 @@
 import { CtaButton } from "@components/buttons/ctaButton";
+import { ImageInput } from "@components/forms/imageInput";
 import { InputForm } from "@components/forms/inputForm";
 import { Header } from "@components/layout/header";
 import Head from "next/head";
@@ -10,15 +11,12 @@ import { HiUserCircle } from "react-icons/hi";
 const CustomerForm = () => {
   const [ name, setName ] = useState<string>('');
   const [ email, setEmail ] = useState<string>('');
+  const [ profilePicture, setProfilePicture ] = useState<string | null>(null);
   const [ products, setProducts ] = useState<Array<string>>(['']);
 
   const handleAddProduct = (event: MouseEvent<HTMLButtonElement>) => {
-    let newProducts = [...products, ''];
-
-    newProducts = newProducts.filter((value, index) => {
-      if(index === 0) return true;
-      return value !== '';
-    });
+    const nonEmptyValues = products.filter(value => value !== '');
+    const newProducts = [...nonEmptyValues, '']
 
     setProducts(newProducts);
   }
@@ -45,12 +43,15 @@ const CustomerForm = () => {
                   Informações do cliente
                 </legend>
                 <div className='w-full max-w-full flex flex-col gap-4 mb-4'>
+                  <div className="w-full grid place-items-center lg:place-items-start">
+                    <ImageInput setImage={setProfilePicture} image={profilePicture} />
+                  </div>
                   <InputForm className="[&>input]:!bg-primary-main/5" isFormik={false} isReadOnly={false} label="Nome do cliente" name="customerName" placeholder="Informe o nome do cliente" props={{ value: name, maxLength: 20, onChange: e => setName(e.target.value) }} />
                   <InputForm className="[&>input]:!bg-primary-main/5" isFormik={false} isReadOnly={false} label="E-mail do cliente" name="customerEmail" placeholder="Informe o email do cliente" props={{ value: email, onChange: e => setEmail(e.target.value) }} />
                 </div>
               </fieldset>
             </section>
-            <section className="w-full lg:w-[36%] flex-shrink-0 p-4 rounded-xl bg-secondary-light border-2 border-secondary-main/20">
+            <section className="w-full lg:w-[36%] h-fit max-h-fit flex-shrink-0 p-4 rounded-xl bg-secondary-light border-2 border-secondary-main/20">
               <fieldset className="w-full max-w-full overflow-hidden flex flex-col gap-6">
                 <legend className="text-lg h-fit flex items-center gap-2 md:text-xl mb-4 font-semibold text-typography-light/80">
                   <BsBoxFill size={18} className='text-secondary-main' />
