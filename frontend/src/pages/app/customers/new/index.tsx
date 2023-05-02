@@ -2,6 +2,7 @@ import { CtaButton } from "@components/buttons/ctaButton";
 import { ImageInput } from "@components/forms/imageInput";
 import { InputForm } from "@components/forms/inputForm";
 import { Header } from "@components/layout/header";
+import { AxiosError } from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
@@ -82,7 +83,7 @@ const CustomerForm = () => {
               const { data } = await apiClient.post('/product', { name, ownerId: customerId ? customerId : customerCreatedId });
               toast.success(`Produto "${name}" foi criado com sucesso!`);
               return { hasAlreadyBeenSent: true, wasCreated: true, name };
-            } catch ({ response: { data } }) {
+            } catch ({ response: { data } }: any) {
               toast.error(`Erro ao criar produto "${name}": ${data.error.message}`);
               return { hasAlreadyBeenSent: true, wasCreated: false, name };
             }

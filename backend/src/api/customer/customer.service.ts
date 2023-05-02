@@ -1,7 +1,12 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { CreateCustomerDto } from './dto/createCustomerDto';
-import { ResponseDto } from 'src/utils/dto/responseDto';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { CreateCustomerDto, CustomerDto, CustomersPaginationDto } from './dto';
+import { ResponseDto } from 'src/utils/dto/responseDto';
 import { checkIfEmailIsValid } from 'src/utils/functions/fieldsChecks';
 
 @Injectable()
@@ -47,5 +52,71 @@ export class CustomerService {
       message: 'Cliente criado com sucesso.',
       data: newCustomer,
     };
+  }
+
+  async getRecentCustomers(limit: number): Promise<Array<CustomerDto>> {
+    const prismaCustomers = await this.prisma.customer.findMany({
+      take: limit,
+      orderBy: { updatedAt: 'desc' },
+      include: { products: true },
+    });
+
+    if (!prismaCustomers)
+      throw new InternalServerErrorException(
+        'Algo deu errado enquanto pegavamos os seus clientes.',
+      );
+
+    const recentCustomers: Array<CustomerDto> = prismaCustomers.map(
+      (customer) => new CustomerDto(customer),
+    );
+
+    if (!recentCustomers)
+      throw new InternalServerErrorException(
+        'Algo deu errado enquanto retornávamos os seus clientes.',
+      );
+
+    return recentCustomers;
+  }
+
+  async getAllCustomers(
+    currentPage: number,
+    pageSize: number,
+  ): Promise<CustomersPaginationDto> {
+    const skip = (currentPage - 1) * pageSize;
+    const take = pageSize;
+
+    const prismaCustomers = await this.prisma.customer.findMany({
+      skip,
+      take,
+      orderBy: { id: 'desc' },
+      include: { products: true },
+    });
+
+    if (!prismaCustomers)
+      throw new InternalServerErrorException(
+        'Algo deu errado enquanto pegavamos os seus clientes.',
+      );
+
+    const customers: Array<CustomerDto> = prismaCustomers.map(
+      (customer) => new CustomerDto(customer),
+    );
+
+    if (!customers)
+      throw new InternalServerErrorException(
+        'Algo deu errado enquanto retornávamos os seus clientes.',
+      );
+
+    const total = await this.prisma.customer.count();
+    const totalPages = Math.ceil(total / pageSize);
+
+    const meta = {
+      hasNext: currentPage < totalPages,
+      hasBefore: currentPage > 1,
+      pageSize,
+      currentPage,
+      totalPages,
+    };
+
+    return new CustomersPaginationDto(meta, customers);
   }
 }

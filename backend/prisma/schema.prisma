@@ -37,6 +37,7 @@ model Customer {
   email            String             @unique
   balance_amount   Decimal
   profile_picture  String?            @db.LongText
+  updatedAt        DateTime           @updatedAt
   transactions     Transaction[]
   products         Product[]          @relation("ProductAffiliate")
   owned            Product[]          @relation("ProductOwner")
