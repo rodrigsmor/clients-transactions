@@ -2,11 +2,11 @@ import { IconContext } from "react-icons";
 import NavDropdown from "../navDropdown";
 import { HiHome } from 'react-icons/hi';
 import { TbFileInvoice } from 'react-icons/tb';
-import { RiUploadCloud2Fill } from "react-icons/ri";
+import { RiUploadCloud2Fill, RiUserAddFill, RiUserFill } from "react-icons/ri";
 
 type HeaderProps = {
   pageTitle: string;
-  name: 'home' | 'transactions' | 'newTransaction';
+  name: 'home' | 'transactions' | 'newTransaction' | 'newCustomer' | 'customer';
 }
 
 export const Header = ({ pageTitle, name }: HeaderProps) => {
@@ -14,6 +14,8 @@ export const Header = ({ pageTitle, name }: HeaderProps) => {
     'home': <HiHome />,
     'transactions': <TbFileInvoice />,
     'newTransaction': <RiUploadCloud2Fill />,
+    'newCustomer': <RiUserAddFill />,
+    'customer': <RiUserFill />
   }
 
   return (

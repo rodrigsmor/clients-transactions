@@ -21,6 +21,8 @@ export default function App({ Component, pageProps }: AppProps) {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken')
 
+    if(router.pathname === '/app/customers/new') return ;
+
     if(['/', '/login'].includes(router.pathname)) {
       if(token) {
         const decodedToken: any = jose.decodeJwt(token)

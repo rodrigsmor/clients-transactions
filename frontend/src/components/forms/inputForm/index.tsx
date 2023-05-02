@@ -10,11 +10,12 @@ interface InputFormProps {
   placeholder: string;
   isReadOnly?: boolean;
   isSecondary?: boolean;
+  isFormik?: boolean;
   props?: InputHTMLAttributes<HTMLInputElement>;
 }
 
-export const InputForm = ({ name, type = 'text', isSecondary = false, isReadOnly = false, props, label, placeholder, className, error = '' }: InputFormProps) => {
-  const Element = !isReadOnly ? Field : 'input';
+export const InputForm = ({ name, type = 'text', isFormik = false, isSecondary = false, isReadOnly = false, props, label, placeholder, className, error = '' }: InputFormProps) => {
+  const Element = (!isReadOnly && isFormik) ? Field : 'input';
   
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
@@ -25,8 +26,7 @@ export const InputForm = ({ name, type = 'text', isSecondary = false, isReadOnly
           ${error && '!border-error-main/60 !bg-error-main/5'}
         `}
       />
-      {!isReadOnly && (<p className="text-error-main text-sm font-medium"> <ErrorMessage name={name} /> </p>) }
-      
+      {(!isReadOnly && isFormik) && (<p className="text-error-main text-sm font-medium"> <ErrorMessage name={name} /> </p>) }
     </div>
   )
 }
