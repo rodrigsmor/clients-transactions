@@ -23,7 +23,6 @@ const Login = () => {
 
     await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signin`, data)
       .then(({ data }) => {
-        console.log(data.access_token)
         if(data.access_token && data.refresh_token) {
           localStorage.setItem('token', data.access_token)
           localStorage.setItem('refreshToken', data.refresh_token)
@@ -44,8 +43,8 @@ const Login = () => {
   return (
     <AuthTemplate isLoading={isLoading} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} title="Conectar" ctaButtonLabel="conectar" subtitle="Conecte-se ao seu administrador e tenha acesso as transações de seus clientes.">
       <>
-        <InputForm label="E-mail" name="email" placeholder="Type your e-mail" type="email" className="col-start-1 col-end-3" />
-        <InputForm label="password" name="password" placeholder="Type your password" type="password" className="col-start-1 col-end-3" />
+        <InputForm isFormik label="E-mail" name="email" placeholder="Type your e-mail" type="email" className="col-start-1 col-end-3" />
+        <InputForm isFormik label="password" name="password" placeholder="Type your password" type="password" className="col-start-1 col-end-3" />
       </>
     </AuthTemplate>
   );

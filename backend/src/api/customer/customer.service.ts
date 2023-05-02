@@ -18,6 +18,22 @@ export class CustomerService {
     if (!customer.name || !customer.name)
       throw new BadRequestException('Nome não pode está vázio.');
 
+    const isNameBeingUsed = await this.prisma.customer.findUnique({
+      where: { name: customer.name },
+    });
+
+    if (Boolean(isNameBeingUsed))
+      throw new BadRequestException(
+        'O nome de cliente já está em uso. Selecione outro!',
+      );
+
+    const isEmailBeingUsed = await this.prisma.customer.findUnique({
+      where: { email: customer.email },
+    });
+
+    if (Boolean(isEmailBeingUsed))
+      throw new BadRequestException('Já há um cliente com esse e-mail');
+
     const newCustomer = await this.prisma.customer.create({
       data: {
         email: customer.email,

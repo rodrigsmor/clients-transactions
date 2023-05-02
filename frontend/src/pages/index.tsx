@@ -53,10 +53,10 @@ export default function Signup() {
   return (
     <AuthTemplate isLoading={isLoading} validationSchema={validationSchema} initialValues={initialValues} onSubmit={handleSubmit} title="Cadastrar" subtitle="Registra já e gerencia as transações de seus clientes." ctaButtonLabel="cadastrar">
       <>
-        <InputForm label="Nome completo" name="fullName" placeholder="Type your full name" type="text" className="col-start-1 col-end-2" props={{ autoComplete: 'off' }} />
-        <InputForm label="E-mail" name="email" placeholder="Type your e-mail" type="email" className="col-start-2 col-end-3" />
-        <InputForm label="Senha" name="password" placeholder="Type your password" type="password" className="col-start-1 col-end-3" />
-        <InputForm label="Confirmar senha" name="confirmPassword" placeholder="Retype your password" type="password" className="col-start-1 col-end-3" />
+        <InputForm isFormik label="Nome completo" name="fullName" placeholder="Type your full name" type="text" className="col-start-1 col-end-2" props={{ autoComplete: 'off' }} />
+        <InputForm isFormik label="E-mail" name="email" placeholder="Type your e-mail" type="email" className="col-start-2 col-end-3" />
+        <InputForm isFormik label="Senha" name="password" placeholder="Type your password" type="password" className="col-start-1 col-end-3" />
+        <InputForm isFormik label="Confirmar senha" name="confirmPassword" placeholder="Retype your password" type="password" className="col-start-1 col-end-3" />
       </>
     </AuthTemplate>
   )

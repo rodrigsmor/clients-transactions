@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken')
 
-    if(router.pathname === '/app/customers/new') return ;
+    // if(router.pathname === '/app/customers/new') return ;
 
     if(['/', '/login'].includes(router.pathname)) {
       if(token) {
@@ -36,7 +36,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
       apiClient.get('/auth')
         .then(({ data }) => {
-          console.log(data)
           setUser(data)
         }).catch(({ response: { data } }) => {
           toast.error(data.error.message);
