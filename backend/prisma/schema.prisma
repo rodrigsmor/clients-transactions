@@ -42,7 +42,7 @@ model Customer {
   products         Product[]          @relation("ProductAffiliate")
   owned            Product[]          @relation("ProductOwner")
 
-  @@map("custumers")
+  @@map("customers")
 }
 
 model Transaction {
