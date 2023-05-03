@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { TransactionsDto } from './dto';
 import { ResponseDto } from 'src/utils/dto/responseDto';
@@ -13,5 +21,14 @@ export class TransactionsController {
     @Body() data: TransactionsDto,
   ): Promise<ResponseDto> {
     return this.transactionsService.saveCustomerTransactions(data);
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getAllTransactions(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+  ) {
+    return this.transactionsService.getAllTransactions(page, pageSize);
   }
 }

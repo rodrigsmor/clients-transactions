@@ -1,9 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TransactionsDto } from './dto';
 import { ResponseDto } from 'src/utils/dto/responseDto';
 import { TransactionsTypes } from 'src/utils/enum';
 import { updateCustomersAccountBalance } from 'src/utils/functions/account.balance.function';
+import { TransactionsPaginationDto } from './dto/transactions.pagination.dto';
+import { TransactionsDetailedDto } from './dto/transactions.detailed.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -48,5 +54,47 @@ export class TransactionsService {
       data: { transaction, customers: customerUpdated },
       message: 'Transação salva com êxito!',
     };
+  }
+
+  async getAllTransactions(
+    currentPage: number,
+    pageSize: number,
+  ): Promise<TransactionsPaginationDto> {
+    const skip = (currentPage - 1) * pageSize;
+    const take = Math.floor(pageSize);
+
+    const prismaTransactions = await this.prisma.transaction.findMany({
+      skip,
+      take,
+      orderBy: { date: 'desc' },
+      include: { customer: true, product: true },
+    });
+
+    if (!prismaTransactions)
+      throw new InternalServerErrorException(
+        'Algo deu errado enquanto consultavamos as transações.',
+      );
+
+    const transactions: Array<TransactionsDetailedDto> = prismaTransactions.map(
+      (transaction) => new TransactionsDetailedDto(transaction),
+    );
+
+    if (!transactions)
+      throw new InternalServerErrorException(
+        'Algo deu errado enquanto tratavamos as transações.',
+      );
+
+    const total = await this.prisma.transaction.count();
+    const totalPages = Math.ceil(total / pageSize);
+
+    const meta = {
+      hasNext: currentPage < totalPages,
+      hasBefore: currentPage > 1,
+      pageSize,
+      currentPage,
+      totalPages,
+    };
+
+    return new TransactionsPaginationDto(meta, transactions);
   }
 }

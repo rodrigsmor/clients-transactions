@@ -1,18 +1,11 @@
 import { CustomerDto } from './';
-
-interface metaType {
-  hasNext: boolean;
-  hasBefore: boolean;
-  pageSize: number;
-  currentPage: number;
-  totalPages: number;
-}
+import MetaType from '../../../utils/@types/pagination.metadata';
 
 export class CustomersPaginationDto {
   data: Array<CustomerDto>;
-  meta: metaType;
+  meta: MetaType;
 
-  constructor(meta: metaType, data: Array<CustomerDto>) {
+  constructor(meta: MetaType, data: Array<CustomerDto>) {
     this.data = data;
     this.meta = meta;
   }
