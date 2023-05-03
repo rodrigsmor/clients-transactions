@@ -56,7 +56,7 @@ export class CustomerService {
 
   async getRecentCustomers(limit: number): Promise<Array<CustomerDto>> {
     const prismaCustomers = await this.prisma.customer.findMany({
-      take: limit,
+      take: Math.floor(limit),
       orderBy: { updatedAt: 'desc' },
       include: { products: true },
     });
@@ -83,7 +83,7 @@ export class CustomerService {
     pageSize: number,
   ): Promise<CustomersPaginationDto> {
     const skip = (currentPage - 1) * pageSize;
-    const take = pageSize;
+    const take = Math.floor(pageSize);
 
     const prismaCustomers = await this.prisma.customer.findMany({
       skip,
