@@ -5,9 +5,9 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { ResponseDto } from '../../utils/dto/responseDto';
+import { checkIfEmailIsValid } from '../../utils/functions/fieldsChecks';
 import { CreateCustomerDto, CustomerDto, CustomersPaginationDto } from './dto';
-import { ResponseDto } from 'src/utils/dto/responseDto';
-import { checkIfEmailIsValid } from 'src/utils/functions/fieldsChecks';
 
 @Injectable()
 export class CustomerService {

@@ -1,5 +1,4 @@
 import { TransactionCardProps } from "@components/cards/transactionsCard";
-import { TransactionsTypes } from '../../../../backend/src/utils/enum/transactions.type';
 import TransactionsEnum from "../enums/transactionsEnum";
 
 export const recentTransactions: Array<TransactionCardProps> = [
