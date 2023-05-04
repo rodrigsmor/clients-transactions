@@ -5,7 +5,7 @@ import TransactionsEnum from "../enums/transactionsEnum";
 export const recentTransactions: Array<TransactionDetailedType> = [
   {
     id: 1,
-    type: TransactionsEnum.COMMISSION_RECEIVED,
+    type: 'COMMISSION_RECEIVED',
     value: 9999,
     product: {
       id: 1,
@@ -21,7 +21,7 @@ export const recentTransactions: Array<TransactionDetailedType> = [
   },
   {
     id: 2,
-    type: TransactionsEnum.COMMISSION_PAID,
+    type: 'COMMISSION_PAID',
     value: 3499,
     product: {
       id: 2,
@@ -37,7 +37,7 @@ export const recentTransactions: Array<TransactionDetailedType> = [
   },
   {
     id: 3,
-    type: TransactionsEnum.PRODUCER_SALES,
+    type: 'PRODUCER_SALES',
     value: 899,
     product: {
       id: 3,
@@ -53,7 +53,7 @@ export const recentTransactions: Array<TransactionDetailedType> = [
   },
   {
     id: 4,
-    type: TransactionsEnum.COMMISSION_PAID,
+    type: 'COMMISSION_PAID',
     value: 2499,
     product: {
       id: 4,
@@ -69,7 +69,7 @@ export const recentTransactions: Array<TransactionDetailedType> = [
   },
   {
     id: 5,
-    type: TransactionsEnum.AFFILIATE_SALES,
+    type: 'AFFILIATE_SALES',
     value: 4999,
     product: {
       id: 5,
@@ -85,7 +85,7 @@ export const recentTransactions: Array<TransactionDetailedType> = [
   },
   {
     id: 6,
-    type: TransactionsEnum.COMMISSION_PAID,
+    type: 'COMMISSION_PAID',
     value: 12384,
     product: {
       id: 4,
@@ -101,7 +101,7 @@ export const recentTransactions: Array<TransactionDetailedType> = [
   },
   {
     id: 7,
-    type: TransactionsEnum.AFFILIATE_SALES,
+    type: 'AFFILIATE_SALES',
     value: 172929,
     product: {
       id: 5,

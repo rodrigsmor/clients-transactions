@@ -6,8 +6,6 @@ import Head from "next/head";
 import { HiUserAdd } from "react-icons/hi";
 import { BsFileTextFill } from 'react-icons/bs'
 import { RiUploadCloud2Fill } from "react-icons/ri";
-import { recentTransactions } from "src/utils/mock/transactions";
-import { customerSummary } from "src/utils/mock/customerSummary";
 import { CustomerSummaryCard } from "@components/cards/customerSummaryCard";
 import { useContext, useEffect, useState, } from "react";
 import apiClient from "src/utils/config/api.client";
@@ -26,10 +24,10 @@ interface RequestsLoadingType {
 
 const Home = () => {
   const { user } = useContext(AppContext);
-  const [ isCustomersLoading, setIsCustomersLoading ] = useState<boolean>(true);
-  const [ isTransactionsLoading, setIsTransactionsLoading] = useState<boolean>(true);
+  const [isCustomersLoading, setIsCustomersLoading] = useState<boolean>(true);
+  const [isTransactionsLoading, setIsTransactionsLoading] = useState<boolean>(true);
 
-  const [ customers, setCustomers ] = useState<Array<CustomerSummaryType>>([]);
+  const [customers, setCustomers] = useState<Array<CustomerSummaryType>>([]);
   const [transactions, setTransactions] = useState<Array<TransactionDetailedType>>([]);
 
   useEffect(() => {
@@ -90,18 +88,18 @@ const Home = () => {
               <ul className="flex w-full max-w-full overflow-y-hidden overflow-x-auto gap-3 custom-scrollbar horizontal">
                 {
                   isCustomersLoading ? (<li className="w-full h-full flex items-center justify-center"><Loading /></li>)
-                  : (
-                    (customers && customers?.length > 0) ? (customers.map((customer) => <li key={customer.id}><CustomerSummaryCard data={customer} /></li>))
                     : (
-                      <li className="w-full h-full flex items-center justify-center gap-4">
-                        <MdOutlineSupervisedUserCircle />
-                        <div className="flex flex-col gap-1 items-center">
-                          <strong className="text-2xl text-center font-semibold text-typography-main">Sem transações</strong>
-                          <p className="text-center text-typography-light/80 w-full font-medium">Aparentemente não há transações recentes</p>
-                        </div>
-                      </li>
+                      (customers && customers?.length > 0) ? (customers.map((customer) => <li key={customer.id}><CustomerSummaryCard data={customer} /></li>))
+                        : (
+                          <li className="w-full h-full flex items-center justify-center gap-4">
+                            <MdOutlineSupervisedUserCircle />
+                            <div className="flex flex-col gap-1 items-center">
+                              <strong className="text-2xl text-center font-semibold text-typography-main">Sem transações</strong>
+                              <p className="text-center text-typography-light/80 w-full font-medium">Aparentemente não há transações recentes</p>
+                            </div>
+                          </li>
+                        )
                     )
-                  )
                 }
               </ul>
             </section>

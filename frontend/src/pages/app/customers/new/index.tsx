@@ -44,7 +44,7 @@ const CustomerForm = () => {
   useEffect(() => {
     const allProductsWereCreated = products.every(({ wasCreated }) => wasCreated === true);
     if (customerId && allProductsWereCreated) {
-      router.push('/app/customers');
+      router.push('/app/home');
     }
   }, [customerId, products, router]);
 

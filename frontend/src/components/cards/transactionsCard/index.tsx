@@ -3,6 +3,7 @@ import TransactionDetailedType from "src/utils/@types/transaction.detailed";
 import TransactionsEnum from "src/utils/enums/transactionsEnum";
 import { convertFromCentavosToReais } from "src/utils/functions/currencyMethods"
 import { formatDateTime } from "src/utils/functions/datetimeMethods";
+import DEFAULT_PROFILE_PICTURE from '@images/DEFAULT_PROFILE_PICTURE.png';
 
 export const TransactionsCard = ({ data: { id, type, value, date, product, customer }}: { data: TransactionDetailedType}) => {
   const dateTime = new Date(date);
@@ -19,7 +20,7 @@ export const TransactionsCard = ({ data: { id, type, value, date, product, custo
         </footer>
       </section>
       <figure className="flex-shrink-0 min-w-fit order-1">
-        <Image src={customer.profile_picture} height={48} width={48} alt={`${customer.name} profile`} className="flex-shrink-0 min-w-11 w-11 h-11 max-h-11 max-w-11 object-cover rounded-full p-1 border-2 border-primary-main/20" />
+        <Image src={customer.profile_picture ?? DEFAULT_PROFILE_PICTURE} height={48} width={48} alt={`${customer.name} profile`} className="flex-shrink-0 min-w-11 w-11 h-11 max-h-11 max-w-11 object-cover rounded-full p-1 border-2 border-primary-main/20" />
       </figure>
     </article>
   )

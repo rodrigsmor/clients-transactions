@@ -1,6 +1,8 @@
+import TransactionsEnum from "../enums/transactionsEnum";
+
 export default interface TransactionDetailedType {
   id: number;
-  type: string;
+  type: 'PRODUCER_SALES' | 'AFFILIATE_SALES' | 'COMMISSION_PAID' | 'COMMISSION_RECEIVED';
   product: {
     id: number;
     name: string;
