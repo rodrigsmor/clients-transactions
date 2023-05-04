@@ -44,6 +44,12 @@ VALUES (
         'carolina@machado.com',
         0.00,
         'https://images.unsplash.com/photo-1614204424926-196a80bf0be8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
+    ), (
+        'CELSO DE MELO',
+        NOW(),
+        'celso.de@melo.com',
+        0.00,
+        'https://images.unsplash.com/flagged/photo-1557878430-4a2b256ce9fc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'
     );
 
 -- create products
@@ -54,4 +60,4 @@ VALUES ('CURSO DE BEM-ESTAR', 1), ('DOMINANDO INVESTIMENTOS', 2), ('DESENVOLVEDO
 
 -- create product affiliates
 
-INSERT INTO _ProductAffiliate (A, B) VALUES (4, 1), (5, 3), (6, 3);
+INSERT INTO _ProductAffiliate (A, B) VALUES (4, 1), (5, 3), (6, 3), (7, 3);

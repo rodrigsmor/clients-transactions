@@ -1,25 +1,11 @@
 import Image from "next/image";
+import TransactionDetailedType from "src/utils/@types/transaction.detailed";
 import TransactionsEnum from "src/utils/enums/transactionsEnum";
 import { convertFromCentavosToReais } from "src/utils/functions/currencyMethods"
 import { formatDateTime } from "src/utils/functions/datetimeMethods";
 
-export type TransactionCardProps = {
-  id: number,
-  type: TransactionsEnum,
-  value: number,
-  product: {
-    id: number,
-    name: string,
-  },
-  customer: {
-    id: number,
-    name: string,
-    profile_picture: string,
-  },
-  date: Date
-}
-
-export const TransactionsCard = ({ data: { id, type, value, date, product, customer }}: { data: TransactionCardProps}) => {
+export const TransactionsCard = ({ data: { id, type, value, date, product, customer }}: { data: TransactionDetailedType}) => {
+  const dateTime = new Date(date);
   const productValue = convertFromCentavosToReais(value);
   
   return (
@@ -28,7 +14,7 @@ export const TransactionsCard = ({ data: { id, type, value, date, product, custo
         <h3 className="max-w-full truncate text-sm font-semibold text-typography-light/70">{ customer.name }</h3>
         <h4 className="max-w-full truncate text-sm font-bold text-typography-main/80" aria-roledescription="produto vendido"><span>{ product.name }</span></h4>
         <footer className="mt-[2px] flex justify-between items-end">
-          <time dateTime={date.toISOString()} className="text-sm font-regular text-typography-light/60">{ formatDateTime(date) }</time>
+          <time dateTime={dateTime.toISOString()} className="text-sm font-regular text-typography-light/60">{ formatDateTime(dateTime) }</time>
           <data value={productValue.money} className='text-base font-semibold text-primary-main'>{productValue.formattedValue}</data>
         </footer>
       </section>

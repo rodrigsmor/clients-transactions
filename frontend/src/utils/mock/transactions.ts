@@ -1,7 +1,8 @@
-import { TransactionCardProps } from "@components/cards/transactionsCard";
+import TransactionType from "../@types/transaction";
+import TransactionDetailedType from "../@types/transaction.detailed";
 import TransactionsEnum from "../enums/transactionsEnum";
 
-export const recentTransactions: Array<TransactionCardProps> = [
+export const recentTransactions: Array<TransactionDetailedType> = [
   {
     id: 1,
     type: TransactionsEnum.COMMISSION_RECEIVED,
@@ -15,6 +16,7 @@ export const recentTransactions: Array<TransactionCardProps> = [
       id: 1,
       name: 'Juliana Carolina Pereira de Oliveira',
       profile_picture: 'https://images.unsplash.com/photo-1614204424926-196a80bf0be8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      email: ""
     },
   },
   {
@@ -30,6 +32,7 @@ export const recentTransactions: Array<TransactionCardProps> = [
       id: 2,
       name: 'Alexandre Gabriel Souza e Silva',
       profile_picture: 'https://images.unsplash.com/photo-1527082395-e939b847da0d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTN8fHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      email: ""
     },
   },
   {
@@ -45,6 +48,7 @@ export const recentTransactions: Array<TransactionCardProps> = [
       id: 3,
       name: 'Gabriela Cristina da Costa Barros',
       profile_picture: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80',
+      email: ""
     },
   },
   {
@@ -60,6 +64,7 @@ export const recentTransactions: Array<TransactionCardProps> = [
       id: 4,
       name: 'Thiago Henrique de Souza e Silva',
       profile_picture: 'https://images.unsplash.com/photo-1611403119860-57c4937ef987?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzJ8fHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      email: ""
     },
   },
   {
@@ -75,6 +80,7 @@ export const recentTransactions: Array<TransactionCardProps> = [
       id: 5,
       name: 'Rafaela Beatriz Almeida Rodrigues',
       profile_picture: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTB8fHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      email: ""
     },
   },
   {
@@ -90,6 +96,7 @@ export const recentTransactions: Array<TransactionCardProps> = [
       id: 4,
       name: 'Larissa Vitória Santos Ferreira',
       profile_picture: 'https://images.unsplash.com/photo-1542596594-649edbc13630?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzV8fHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      email: ""
     },
   },
   {
@@ -105,6 +112,7 @@ export const recentTransactions: Array<TransactionCardProps> = [
       id: 5,
       name: 'Guilherme Henrique da Silva Santos',
       profile_picture: 'https://images.unsplash.com/photo-1542327897-d73f4005b533?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
+      email: ""
     },
   },
 ]

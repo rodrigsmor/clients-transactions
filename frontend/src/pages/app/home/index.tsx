@@ -9,20 +9,66 @@ import { RiUploadCloud2Fill } from "react-icons/ri";
 import { recentTransactions } from "src/utils/mock/transactions";
 import { customerSummary } from "src/utils/mock/customerSummary";
 import { CustomerSummaryCard } from "@components/cards/customerSummaryCard";
-import { useContext,  } from "react";
+import { useContext, useEffect, useState, } from "react";
 import apiClient from "src/utils/config/api.client";
 import { toast } from "react-hot-toast";
 import AppContext from "src/utils/context/appContext";
+import TransactionDetailedType from "src/utils/@types/transaction.detailed";
+import { TbMoodEmpty } from "react-icons/tb";
+import Loading from "@components/layout/loading";
+import CustomerSummaryType from "src/utils/@types/customer.summary";
+import { MdOutlineSupervisedUserCircle } from "react-icons/md";
+
+interface RequestsLoadingType {
+  isCustomersLoading: boolean;
+  isTransactionsLoading: boolean;
+}
 
 const Home = () => {
   const { user } = useContext(AppContext);
+  const [ isCustomersLoading, setIsCustomersLoading ] = useState<boolean>(true);
+  const [ isTransactionsLoading, setIsTransactionsLoading] = useState<boolean>(true);
+
+  const [ customers, setCustomers ] = useState<Array<CustomerSummaryType>>([]);
+  const [transactions, setTransactions] = useState<Array<TransactionDetailedType>>([]);
+
+  useEffect(() => {
+    async function fetchTransactions() {
+      apiClient.get('/transactions')
+        .then(({ data }) => {
+          setTransactions(data.data);
+        })
+        .catch((error) => {
+          const { data } = error.response;
+          toast.error(data.error.message);
+        })
+        .finally(() => setIsCustomersLoading(false))
+    }
+
+    async function fetchCustomers() {
+      apiClient.get('/customer/recents')
+        .then(({ data }) => {
+          setCustomers(data);
+          console.log(data)
+        })
+        .catch((error) => {
+          const { data } = error.response;
+          toast.error(data.error.message);
+          console.log(error)
+        })
+        .finally(() => setIsTransactionsLoading(false))
+    }
+
+    fetchTransactions();
+    fetchCustomers();
+  }, [])
 
   return (
     <>
       <Head>
         <title>App - Home</title>
       </Head>
-      <div className="w-screen h-screen min-h-fit max-w-screen lg:overflow-hidden bg-background-main" aria-labelledby="header_PageTitle">
+      <div className="w-screen h-screen min-h-fit max-w-screen overflow-x-hidden lg:overflow-hidden bg-background-main" aria-labelledby="header_PageTitle">
         <Header pageTitle="Visão geral" name="home" />
         <main className="px-4 md:px-12 lg:px-16 pt-24 h-fit lg:h-full w-full min-w-full flex flex-col gap-5 lg:gap-12 lg:grid grid-cols-[2fr_minmax(340px,1fr)]">
           <div className="lg:col-start-1 lg:col-end-2 flex flex-col gap-7 overflow-hidden">
@@ -43,7 +89,19 @@ const Home = () => {
               </header>
               <ul className="flex w-full max-w-full overflow-y-hidden overflow-x-auto gap-3 custom-scrollbar horizontal">
                 {
-                  customerSummary.map((customer) => <li key={customer.id}><CustomerSummaryCard data={customer} /></li>)
+                  isCustomersLoading ? (<li className="w-full h-full flex items-center justify-center"><Loading /></li>)
+                  : (
+                    (customers && customers?.length > 0) ? (customers.map((customer) => <li key={customer.id}><CustomerSummaryCard data={customer} /></li>))
+                    : (
+                      <li className="w-full h-full flex items-center justify-center gap-4">
+                        <MdOutlineSupervisedUserCircle />
+                        <div className="flex flex-col gap-1 items-center">
+                          <strong className="text-2xl text-center font-semibold text-typography-main">Sem transações</strong>
+                          <p className="text-center text-typography-light/80 w-full font-medium">Aparentemente não há transações recentes</p>
+                        </div>
+                      </li>
+                    )
+                  )
                 }
               </ul>
             </section>
@@ -55,7 +113,17 @@ const Home = () => {
             </header>
             <ul className="w-full h-fit flex flex-col gap-5 lg:h-full lg:max-h-full lg:overflow-y-auto pb-6 lg:pb-11 custom-scrollbar">
               {
-                recentTransactions.map(transaction => <li key={transaction.id}><TransactionsCard data={transaction} /></li>)
+                isTransactionsLoading ? (<li className="w-full h-full flex items-center justify-center"><Loading /></li>)
+                  : ((transactions && transactions.length > 0) ? (transactions.map(transaction => <li key={transaction.id}><TransactionsCard data={transaction} /></li>))
+                    : (
+                      <li className="w-full h-full gap-7 flex items-center justify-center flex-col">
+                        <TbMoodEmpty size={64} className='text-primary-main/80' />
+                        <div className="flex flex-col gap-1 items-center">
+                          <strong className="text-2xl text-center font-semibold text-typography-main">Sem transações</strong>
+                          <p className="text-center text-typography-light/80 w-full font-medium">Aparentemente não há transações recentes</p>
+                        </div>
+                      </li>
+                    ))
               }
             </ul>
           </aside>
