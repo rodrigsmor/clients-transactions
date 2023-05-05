@@ -1,16 +1,5 @@
 version: '3'
 services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "5172:5172"
-    environment:
-      NODE_ENV: production
-      NEXT_PUBLIC_API_BASE_URL: http://192.168.1.139:3000
-    volumes:
-      - ./frontend:/app
-    command: npm run start
-
   db:
     image: mysql:latest
     ports:
@@ -27,12 +16,24 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
-      DATABASE_URL: "mysql://root:Clear.22@localhost:3306/db_desafio?schema=public"
+      DATABASE_URL: "mysql://root:Clear.22@db:3306/db_desafio?schema=public"
     depends_on:
       - db
     volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run start
+      - ./backend:/app
+    command: npm start
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "5172:5172"
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_BASE_URL: http://192.168.1.139:3000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+    command: npm run dev
 volumes:
   db_data:

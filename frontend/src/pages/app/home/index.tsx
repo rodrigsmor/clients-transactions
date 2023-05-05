@@ -91,11 +91,11 @@ const Home = () => {
                     : (
                       (customers && customers?.length > 0) ? (customers.map((customer) => <li key={customer.id}><CustomerSummaryCard data={customer} /></li>))
                         : (
-                          <li className="w-full h-full flex items-center justify-center gap-4">
-                            <MdOutlineSupervisedUserCircle />
+                          <li className="w-full h-full flex items-center justify-center flex-col gap-4">
+                            <MdOutlineSupervisedUserCircle size={48} className="text-primary-main" />
                             <div className="flex flex-col gap-1 items-center">
-                              <strong className="text-2xl text-center font-semibold text-typography-main">Sem transações</strong>
-                              <p className="text-center text-typography-light/80 w-full font-medium">Aparentemente não há transações recentes</p>
+                              <strong className="text-2xl text-center font-semibold text-typography-main">Sem clientes</strong>
+                              <p className="text-center text-typography-light/80 w-full font-medium">Você não possui clientes ainda</p>
                             </div>
                           </li>
                         )

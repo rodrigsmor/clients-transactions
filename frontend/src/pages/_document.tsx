@@ -1,14 +1,12 @@
 import dotenv from 'dotenv';
-import { GoogleFonts } from 'next-google-fonts';
 import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
   dotenv.config();
 
   return (
-    <Html lang="en">
+    <Html lang="pt-BR">
       <Head>
-        <GoogleFonts href='https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap' />
       </Head>
       <body>
         <Main />

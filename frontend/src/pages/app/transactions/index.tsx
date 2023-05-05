@@ -1,7 +1,6 @@
 import { Header } from "@components/layout/header";
 import Head from "next/head";
 import { IoChevronBackSharp, IoChevronForwardSharp } from "react-icons/io5";
-import { recentTransactions } from "src/utils/mock/transactions";
 import { TransactionDetailedCard } from "@components/cards/transactionDetailedCard";
 import { MouseEvent, useEffect, useState } from "react";
 import TransactionDetailedType from "src/utils/@types/transaction.detailed";
@@ -63,11 +62,11 @@ const Transactions = () => {
           </header>
           <ul className="w-full min-w-full transition-all duration-300 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {
-              isLoading ? (<li className="w-full min-w-full min-h-[20vh] flex items-center justify-center"><Loading /></li>)
+              isLoading ? (<li className="w-full col-start-1 col-end-4 h-full flex flex-col items-center justify-center gap-4"><Loading /></li>)
                 : ((transactions && transactions.length > 0) ? transactions.map((transaction, index) => <li key={index}><TransactionDetailedCard data={transaction} /></li>)
                   : (
-                    <li className="w-full h-full flex items-center justify-center gap-4">
-                      <MdOutlineSupervisedUserCircle />
+                    <li className="w-full col-start-1 col-end-4 h-full flex flex-col items-center justify-center gap-4">
+                      <MdOutlineSupervisedUserCircle size={56} className="text-primary-main" />
                       <div className="flex flex-col gap-1 items-center">
                         <strong className="text-2xl text-center font-semibold text-typography-main">Sem transações</strong>
                         <p className="text-center text-typography-light/80 w-full font-medium">Aparentemente não há transações recentes</p>
