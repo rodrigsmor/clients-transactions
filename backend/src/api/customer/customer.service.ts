@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { ResponseDto } from '../../utils/dto/responseDto';
+import { CustomerCreationDto } from '../../utils/dto/responseDto';
 import { checkIfEmailIsValid } from '../../utils/functions/fieldsChecks';
 import { CreateCustomerDto, CustomerDto, CustomersPaginationDto } from './dto';
 
@@ -13,7 +13,9 @@ import { CreateCustomerDto, CustomerDto, CustomersPaginationDto } from './dto';
 export class CustomerService {
   constructor(@Inject(PrismaClient) private prisma: PrismaClient) {}
 
-  async createCustomer(customer: CreateCustomerDto): Promise<ResponseDto> {
+  async createCustomer(
+    customer: CreateCustomerDto,
+  ): Promise<CustomerCreationDto> {
     if (customer.email === '' || customer.email === null)
       throw new BadRequestException('O e-mail não pode está vazio.');
 
