@@ -1,14 +1,15 @@
 version: '3'
 services:
   db:
-    image: mysql:latest
+    image: mysql:8
     ports:
       - 3308:3306
     environment:
-      MYSQL_ROOT_PASSWORD: Clear.22
-      MYSQL_DATABASE: db_desafio
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - db_data:/var/lib/mysql
+      - ./backend/prisma:/prisma-seed
   
   backend:
     build: ./backend
@@ -16,24 +17,43 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
-      DATABASE_URL: "mysql://root:Clear.22@db:3306/db_desafio?schema=public"
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}?schema=public
     depends_on:
       - db
     volumes:
       - ./backend:/app
     command: npm start
-  
+
   frontend:
     build: ./frontend
     ports:
       - "5172:5172"
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_API_BASE_URL: http://192.168.1.139:3000
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
     command: npm run dev
+  
+  seed:
+    image: mysql:8
+    depends_on:
+      - db
+    volumes:
+      - ./backend/prisma:/prisma-seed
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_INITDB_SKIP_TZINFO: "1"
+      MYSQL_RANDOM_ROOT_PASSWORD: "no"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    command: sh -c "while ! mysqladmin ping -h db --silent; do sleep 1; done; mysql -h db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /prisma-seed/seed.sql"
+
 volumes:
   db_data:
