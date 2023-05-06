@@ -31,7 +31,7 @@ export class CustomerDto {
   @ApiProperty({
     example: 'https://images.unsplash.com/photo...',
     type: 'string',
-    description: `The customer's profile picture, which in this case can be either a base64 uel or a photo url`,
+    description: `The customer's profile picture, which in this case can be either a base64 url or a photo url`,
   })
   profile_picture: string;
 

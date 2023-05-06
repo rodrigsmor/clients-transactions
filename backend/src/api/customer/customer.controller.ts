@@ -13,7 +13,6 @@ import { CustomerCreationDto } from 'src/utils/dto/responseDto';
 import {
   ApiBearerAuth,
   ApiOperation,
-  ApiProperty,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -36,10 +35,6 @@ export class CustomerController {
     description:
       'Creating a new customer that can be the producer or affiliate of various products.',
   })
-  @ApiResponse({
-    description:
-      'The customers who have had the most recent changes based on the limit quantity in the request.',
-  })
   async createCustomer(
     @Body() customer: CreateCustomerDto,
   ): Promise<CustomerCreationDto> {
@@ -53,7 +48,10 @@ export class CustomerController {
     description: `Returns a list of customers that have undergone recent changes, and you can limit the number of customers returned by the query 'limit'. The default value of this query is 10 customers.`,
   })
   @ApiResponse({
+    status: 202,
     type: [CustomerDto],
+    description:
+      'The customers who have had the most recent changes based on the limit quantity in the request.',
   })
   @ApiQuery({
     name: 'limit',
@@ -86,6 +84,7 @@ export class CustomerController {
     example: 10,
   })
   @ApiResponse({
+    status: 200,
     type: CustomersPaginationDto,
   })
   async getCustomers(

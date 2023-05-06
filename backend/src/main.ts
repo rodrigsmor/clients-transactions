@@ -16,8 +16,10 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExecptionFilter());
 
   const config = new DocumentBuilder()
-    .setTitle('API documentation')
-    .setDescription('API of a transactions manager.')
+    .setTitle('API Documentation')
+    .setDescription(
+      `API documentation for the application developed at Hudla's challenge, which is a user transaction management application. This application has JWT token-based authentication and authorization, so always update your credentials to make your requests.`,
+    )
     .setVersion('1.0')
     .addBearerAuth({
       type: 'http',
