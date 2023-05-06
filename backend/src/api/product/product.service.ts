@@ -5,7 +5,8 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { ResponseDto } from 'src/utils/dto/responseDto';
+import { ProductResponseDto } from './dto';
+import { ProductDto } from './dto/ProductDto';
 
 @Injectable()
 export class ProductService {
@@ -14,7 +15,7 @@ export class ProductService {
   async createProduct(
     productName: string,
     ownerId: number,
-  ): Promise<ResponseDto> {
+  ): Promise<ProductDto> {
     if (!productName || productName === '')
       throw new BadRequestException(
         'É preciso declarar um nome para o seu produto.',
@@ -44,16 +45,13 @@ export class ProductService {
       },
     });
 
-    return {
-      data: product,
-      message: 'Produto criado com êxito!',
-    };
+    return product;
   }
 
   async addAffiliateToProduct(
     productId: number,
     customerId: number,
-  ): Promise<ResponseDto> {
+  ): Promise<ProductResponseDto> {
     if (!productId || productId === null || customerId === null || !customerId)
       throw new BadRequestException(
         'Você deve informar o id do produto e do cliente!',
