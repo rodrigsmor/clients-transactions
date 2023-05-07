@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { CustomerCreationDto } from '../../utils/dto/responseDto';
+import { CustomerCreationDto } from './dto';
 import { checkIfEmailIsValid } from '../../utils/functions/fieldsChecks';
 import { CreateCustomerDto, CustomerDto, CustomersPaginationDto } from './dto';
 

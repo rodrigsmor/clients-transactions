@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateCustomerDto, CustomerDto, CustomersPaginationDto } from './dto';
 import { CustomerService } from './customer.service';
-import { CustomerCreationDto } from 'src/utils/dto/responseDto';
+import { CustomerCreationDto } from './dto';
 import {
   ApiBearerAuth,
   ApiOperation,
