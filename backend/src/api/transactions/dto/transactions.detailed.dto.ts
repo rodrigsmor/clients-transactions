@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Customer, Product, Transaction } from '@prisma/client';
-import { TransactionsTypes } from 'src/utils/enum';
+import { TransactionsTypes } from '../../../utils/enum';
 
 export class TransactionsDetailedDto {
   @ApiProperty({

@@ -3,13 +3,18 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { TransactionsDto } from './dto';
-import { ResponseDto } from 'src/utils/dto/responseDto';
-import { TransactionsTypes } from 'src/utils/enum';
-import { updateCustomersAccountBalance } from 'src/utils/functions/account.balance.function';
+import { ResponseDto } from '../../utils/dto/responseDto';
+import { TransactionsTypes } from '../../utils/enum';
 import { TransactionsPaginationDto } from './dto/transactions.pagination.dto';
 import { TransactionsDetailedDto } from './dto/transactions.detailed.dto';
+import { Customer, Product } from '@prisma/client';
+
+export interface UpdateCustomersAccountBalanceTypes {
+  seller: Customer;
+  producer?: Customer;
+}
 
 @Injectable()
 export class TransactionsService {
@@ -34,7 +39,7 @@ export class TransactionsService {
         'O produto associado a essa transação não existe!',
       );
 
-    const customerUpdated = await updateCustomersAccountBalance(
+    const customerUpdated = await this.updateCustomersAccountBalance(
       data,
       seller,
       product,
@@ -96,5 +101,44 @@ export class TransactionsService {
     };
 
     return new TransactionsPaginationDto(meta, transactions);
+  }
+
+  async updateCustomersAccountBalance(
+    transaction: TransactionsDto,
+    customer: Customer,
+    product: Product,
+  ): Promise<UpdateCustomersAccountBalanceTypes> {
+    const prisma = new PrismaService();
+    let updatedAccountBalance = 0;
+    const isToUpdateProducerBalance: boolean = transaction.type === 2;
+
+    if (isToUpdateProducerBalance) {
+      const owner = await prisma.customer.findUnique({
+        where: { id: product.ownerId },
+      });
+
+      updatedAccountBalance =
+        owner.balance_amount.toNumber() + transaction.value;
+    } else if (transaction.type === 3) {
+      updatedAccountBalance =
+        customer.balance_amount.toNumber() - transaction.value;
+    } else {
+      updatedAccountBalance =
+        customer.balance_amount.toNumber() + transaction.value;
+    }
+
+    const customerUpdated = await prisma.customer.update({
+      where: { id: isToUpdateProducerBalance ? product.ownerId : customer.id },
+      data: { balance_amount: updatedAccountBalance },
+    });
+
+    return isToUpdateProducerBalance
+      ? {
+          producer: customerUpdated,
+          seller: customer,
+        }
+      : {
+          seller: customerUpdated,
+        };
   }
 }
