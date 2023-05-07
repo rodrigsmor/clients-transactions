@@ -21,13 +21,13 @@ export class ProductService {
         'É preciso declarar um nome para o seu produto.',
       );
 
+    if (!ownerId) throw new BadRequestException('Informe o dono desse produto');
+
     const wasTheNameUsed = await this.hasProductNameAlreadyUsed(productName);
     if (wasTheNameUsed)
       throw new BadRequestException(
         'Nome de produto já em uso. Selecione outro!',
       );
-
-    if (!ownerId) throw new BadRequestException('Informe o dono desse produto');
 
     const owner = await this.prisma.customer.findUnique({
       where: {
