@@ -4,7 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Customer } from '@prisma/client';
 import { CustomerCreationDto } from './dto';
 import { checkIfEmailIsValid } from '../../utils/functions/fieldsChecks';
 import { CreateCustomerDto, CustomerDto, CustomersPaginationDto } from './dto';
@@ -120,5 +120,30 @@ export class CustomerService {
     };
 
     return new CustomersPaginationDto(meta, customers);
+  }
+
+  async getCustomersById(
+    customersId: Array<number>,
+  ): Promise<Array<CustomerDto>> {
+    const foundCustomers = await this.prisma.customer.findMany({
+      where: { id: { in: customersId } },
+      include: { products: true },
+    });
+
+    if (foundCustomers.length !== customersId.length) {
+      const notFoundCustomersIds = customersId.filter(
+        (customerId) =>
+          !foundCustomers.some((customer) => customer.id === customerId),
+      );
+      throw new BadRequestException(
+        `Cliente com Ids ${notFoundCustomersIds} não foram encontrados`,
+      );
+    }
+
+    const customersDto = foundCustomers.map(
+      (customer) => new CustomerDto(customer),
+    );
+
+    return customersDto;
   }
 }

@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -92,5 +93,21 @@ export class CustomerController {
     @Query('pageSize') pageSize = 10,
   ): Promise<CustomersPaginationDto> {
     return this.customerService.getAllCustomers(page, pageSize);
+  }
+
+  @Patch('/ids')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiBearerAuth()
+  @ApiOperation({
+    description: `Returns a list of customers by Ids`,
+  })
+  @ApiResponse({
+    status: 202,
+    type: [CustomerDto],
+  })
+  async getCustomerById(
+    @Body() customersId: Array<number>,
+  ): Promise<Array<CustomerDto>> {
+    return this.customerService.getCustomersById(customersId);
   }
 }
