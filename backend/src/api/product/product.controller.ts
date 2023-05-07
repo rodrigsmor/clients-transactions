@@ -9,7 +9,12 @@ import {
 import { CreateProductDto } from './dto/createProductDto';
 import { ProductService } from './product.service';
 import { AddAffiliateDto } from './dto/addAffiliateDto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ProductDto } from './dto/ProductDto';
 import { ProductResponseDto } from './dto/ProductResponseDto';
 
@@ -23,6 +28,7 @@ export class ProductController {
   @ApiOperation({
     description: 'Creates a new product by user id',
   })
+  @ApiBearerAuth()
   @ApiResponse({
     type: ProductDto,
   })
@@ -36,6 +42,7 @@ export class ProductController {
     description:
       'This route adds an affiliate to a product. In other words, it turns a customer into an affiliate of a product, thus allowing to sell a product and earn a commission for the sale.',
   })
+  @ApiBearerAuth()
   @ApiResponse({
     type: ProductResponseDto,
     description: 'It will return the customer and product updateds',
