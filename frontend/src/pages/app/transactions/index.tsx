@@ -2,12 +2,15 @@ import { Header } from "@components/layout/header";
 import Head from "next/head";
 import { IoChevronBackSharp, IoChevronForwardSharp } from "react-icons/io5";
 import { TransactionDetailedCard } from "@components/cards/transactionDetailedCard";
-import { MouseEvent, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TransactionDetailedType from "src/utils/@types/transaction.detailed";
 import apiClient from "src/utils/config/api.client";
 import { toast } from "react-hot-toast";
 import Loading from "@components/layout/loading";
 import { MdOutlineSupervisedUserCircle } from "react-icons/md";
+import AppContext from "src/utils/context/appContext";
+import { CustomerUpdatedType } from "src/utils/@types/customer.updated";
+import { CustomersUpdatedCard } from "@components/cards/customersUpdatedCard";
 
 export interface MetaType {
   hasNext: boolean;
@@ -17,8 +20,9 @@ export interface MetaType {
   totalPages: number;
 }
 
-
 const Transactions = () => {
+  const { customersId } = useContext(AppContext);
+  const [customers, setCustomers] = useState<CustomerUpdatedType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pagination, setPagination] = useState<MetaType>({
@@ -46,8 +50,16 @@ const Transactions = () => {
         .finally(() => setIsLoading(false));
     }
 
+    async function getCustomers() {
+      apiClient.patch('/customer/ids', Array.from(customersId as Set<number>))
+        .then(({ data }) => {
+          setCustomers(data);
+        })
+    }
+
     getTransactions();
-  }, [currentPage])
+    (customersId && customersId.size > 0) && getCustomers();
+  }, [currentPage, customersId])
 
   return (
     <>
@@ -57,6 +69,22 @@ const Transactions = () => {
       <div className="w-screen h-screen min-h-fit max-w-screen overflow-x-hidden bg-background-main">
         <Header pageTitle="Transações" name="transactions" />
         <main className="max-w-full overflow-hidden pb-9 flex flex-col gap-6 px-4 md:px-12 lg:px-16 pt-24 h-fit w-full min-w-full">
+          {
+            (customers && customers.length > 0) && (
+              <section className="w-full max-w-full overflow-hidden flex flex-col gap-5">
+                <header className="w-full flex items-center justify-between">
+                  <h2 className='text-xl text-typography-light font-semibold'>Atualização dos clientes</h2>
+                </header>
+                <ul className="w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden flex custom-scrollbar horizontal">
+                  {
+                    customers.map(customer => (
+                      <CustomersUpdatedCard key={customer.id} data={customer} />
+                    ))
+                  }
+                </ul>
+              </section>
+            )
+          }
           <header className="w-full flex items-center justify-between">
             <h2 className='text-xl text-typography-light font-semibold'>Transações dos seus clientes</h2>
           </header>

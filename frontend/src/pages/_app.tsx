@@ -17,11 +17,11 @@ export default function App({ Component, pageProps }: AppProps) {
     profile_picture: '',
   });
 
+  const [ customersId, setCustomersId ] = useState<Set<number> | null>(null);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken')
-
-    // if(router.pathname === '/app/customers/new') return ;
 
     if(['/', '/login'].includes(router.pathname)) {
       if(token) {
@@ -44,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [router])
 
   return (
-    <AppContext.Provider value={{ user, setUser }}>
+    <AppContext.Provider value={{ user, setUser, customersId, setCustomersId }}>
       <Toaster position='top-center' />
       <Component {...pageProps} />
     </AppContext.Provider>

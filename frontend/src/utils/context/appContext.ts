@@ -3,7 +3,9 @@ import { createContext } from "react";
 
 interface AppContext {
   user: User;
+  customersId: Set<number>| null;
   setUser: (user: User) => void;
+  setCustomersId: (customersId: Set<number> | null) => void;
 }
 
 const AppContext = createContext<AppContext>({
@@ -12,6 +14,8 @@ const AppContext = createContext<AppContext>({
     email: "",
     profile_picture: ""
   },
+  customersId: null,
+  setCustomersId: () => {},
   setUser: () => {},
 })
 

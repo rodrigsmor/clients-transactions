@@ -1,6 +1,5 @@
 import Image from "next/image";
 import TransactionDetailedType from "src/utils/@types/transaction.detailed";
-import TransactionsEnum from "src/utils/enums/transactionsEnum";
 import { convertFromCentavosToReais } from "src/utils/functions/currencyMethods"
 import { formatDateTime } from "src/utils/functions/datetimeMethods";
 import DEFAULT_PROFILE_PICTURE from '@images/DEFAULT_PROFILE_PICTURE.png';

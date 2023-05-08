@@ -21,6 +21,7 @@
     "formik": "^2.2.9",
     "jose": "^4.14.4",
     "jsonwebtoken": "^9.0.0",
+    "lodash": "^4.17.21",
     "next": "13.3.1",
     "next-google-fonts": "^2.2.0",
     "postcss": "8.4.23",
@@ -33,6 +34,7 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.2"
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/lodash": "^4.14.194"
   }
 }

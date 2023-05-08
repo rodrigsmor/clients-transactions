@@ -1,17 +1,21 @@
 import { TransactionFieldset } from "@components/cards/transactionFieldset";
 import { FileInput } from "@components/forms/fileInput";
 import { Header } from "@components/layout/header";
+import { AxiosError } from "axios";
+import _ from "lodash";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFileRichtext } from "react-icons/bs";
 import { ImFilesEmpty } from "react-icons/im";
 import TransactionType from "src/utils/@types/transaction";
 import apiClient from "src/utils/config/api.client";
+import AppContext from "src/utils/context/appContext";
 
 const TransactionNew = () => {
   const router = useRouter();
+  const { setCustomersId } = useContext(AppContext);
   const [file, setFile] = useState<File | null>(null);
   const [transactions, setTransactions] = useState<Array<TransactionType>>([]);
 
@@ -20,18 +24,33 @@ const TransactionNew = () => {
 
     if (transactions.length <= 0) return !toast.error('você precisa de no minimo uma transação.');
 
-    transactions.forEach(async (transaction, index) => {
-      await apiClient.post('/transactions', transaction)
-        .then(({ data }) => {
-          console.log(data)
-        })
-        .catch(({ response: { data } }) => {
-          toast.error(`Error ao salvar transação: ${index + 1}. ${data.error.message}`);
-        })
-    });
+    let customersId: number[] = [];
 
-    toast.success('As transações foram salvas com êxito!');
-    router.push('/app/transactions');
+    try {
+      const requests = transactions.map(transaction => apiClient.post('/transactions', transaction));
+      const responses = await Promise.all(requests);
+
+      responses.forEach(response => {
+        const sellerId = response?.data?.data?.customers?.seller?.id;
+        const producerId = response?.data?.data?.customers?.producer?.id;
+
+        if (sellerId) {
+          customersId.push(sellerId);
+        }
+
+        if (producerId) {
+          customersId.push(producerId);
+        }
+      });
+
+      setCustomersId(new Set(customersId));
+      toast.success('As transações foram salvas com êxito!');
+      router.push('/app/transactions');
+    } catch (error) {
+      const { response } = error as AxiosError;
+      const { data }: any = response;
+      toast.error(`Error ao salvar transação: ${data?.error?.message}`);
+    }
   }
 
   return (
