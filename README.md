@@ -61,7 +61,7 @@ The project assumes the point of view of an administrator user, who has the role
 With the bundle on your local device, you just need to run the command above:
 
 ```
-git clone rodrigo-moreira.bundle hubla-take-home
+git clone https://github.com/rodrigsmor/clients-transactions.git
 ```
 
 And finished! The application is cloned on your local device, however to run the application itself, you will need to follow some steps.
